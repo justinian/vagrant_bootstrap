@@ -22,4 +22,5 @@ cat /vagrant/provision/authorized_keys >> /home/vagrant/.ssh/authorized_keys
 # Install my dotfiles
 DOTS_GIT="https://justinian@bitbucket.org/justinian/dotfiles.git"
 sudo -u vagrant git clone $DOTS_GIT /home/vagrant/.dotfiles
-sudo -u vagrant /home/vagrant/.dotfiles/.install
+echo "/home/vagrant/.dotfiles/.install" >> /home/vagrant/.bashrc
+echo "exec bash -l" >> /home/vagrant/.bashrc
