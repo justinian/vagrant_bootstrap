@@ -1,0 +1,35 @@
+- name: Adding user justin
+  user: name=justin shell=/bin/bash groups=sudo,adm,users password={{crypted_pass}}
+  register: justin_user_add
+
+- name: Adding justin's dotfiles
+  git: repo=https://bitbucket.org/justinian/dotfiles.git dest=/home/justin/.dotfiles
+  sudo: yes
+  sudo_user: justin
+  when: justin_user_add|success
+  register: justin_dotfiles_clone
+
+- name: Adding justin's vim runtime
+  git: repo=https://github.com/justinian/vim_runtime.git dest=/home/justin/.vim
+  sudo: yes
+  sudo_user: justin
+  when: justin_user_add|success
+
+- name: Installing jusitn's dotfiles
+  when: justin_dotfiles_clone|success
+  sudo: yes
+  sudo_user: justin
+  copy: >
+    dest=/home/justin/.bashrc
+    content="/home/justin/.dotfiles/.install && exec bash -l"
+
+- name: Add host-specific bashrc
+  when: justin_dotfiles_clone|success
+  lineinfile: >
+    create=yes
+    dest=/home/justin/.dotfiles/bashrc.d/hosts/{{ansible_hostname}}
+    line="HOST_COLOR='01;31m'; SKIP_ALUCARD=1"
+
+- name: Adding justin's authorized_keys
+  authorized_key: user=justin key=https://github.com/justinian.keys
+  when: justin_user_add|success

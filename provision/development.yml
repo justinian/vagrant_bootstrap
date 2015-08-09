@@ -1,0 +1,10 @@
+- hosts: all
+  user: vagrant
+  sudo: yes
+  roles:
+    - user_justin
+    - dev_tools
+
+  tasks:
+    - name: Autoclean apt
+      command: apt-get autoremove -y

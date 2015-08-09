@@ -1,4 +1,0 @@
-name: example_project
-giturl: git@bitbucket.org:justinian/vagrant_bootstrap.git
-packages:
-    - git
