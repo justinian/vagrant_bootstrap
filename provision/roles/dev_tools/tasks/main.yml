@@ -1,2 +1,5 @@
 - name: Install vim
   apt: package=vim-nox
+
+- name: Install ctags
+  apt: package=exuberant-ctags
