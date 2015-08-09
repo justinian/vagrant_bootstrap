@@ -25,16 +25,20 @@
   when: justin_dotfiles_clone|success
   sudo: yes
   sudo_user: justin
-  copy: >
-    dest=/home/justin/.bashrc
-    content="/home/justin/.dotfiles/.install && exec bash -l"
+  command: /home/justin/.dotfiles/.install
+  args:
+    chdir: /home/justin
+    creates: /home/justin/.dotfiles.old
 
 - name: Add host-specific bashrc
   when: justin_dotfiles_clone|success
   lineinfile: >
     create=yes
     dest=/home/justin/.dotfiles/bashrc.d/hosts/{{ansible_hostname}}
-    line="HOST_COLOR='01;31m'; SKIP_ALUCARD=1"
+    line={{item}}
+  with_items:
+    - "HOST_COLOR=\\'01;31m\\'"
+    - "SKIP_ALUCARD=1"
 
 - name: Adding justin's authorized_keys
   authorized_key: user=justin key=https://github.com/justinian.keys
