@@ -1,0 +1,43 @@
+- name: Download Go
+  register: golang_download
+  get_url: >
+    url=https://storage.googleapis.com/golang/go{{golang_version}}.linux-amd64.tar.gz
+    dest=/tmp/go{{golang_version}}.linux-amd64.tar.gz
+
+- name: Unpack Go
+  when: golang_download|success
+  register: golang_unpack
+  unarchive: >
+    src=/tmp/go{{golang_version}}.linux-amd64.tar.gz
+    dest=/usr/local/
+    copy=no
+
+- name: Install Go commands
+  when: golang_unpack|success
+  file: src=/usr/local/go/bin/{{item}} dest=/usr/local/bin/{{item}} state=link
+  with_items:
+    - go
+    - gofmt
+    - godoc
+
+- name: Install justin's GOPATH
+  when: justin_user_add|success
+  register: golang_jusitn_gopath
+  file: path=/home/justin/{{item}} owner=justin group=justin state=directory
+  with_items:
+    - go
+    - go/src
+    - go/pkg
+    - go/bin
+
+- name: Add GOPATH/bin to PATH
+  when: justin_user_add|success and justin_local_bashrc|success
+  lineinfile: >
+    dest=/home/justin/.dotfiles/bashrc.d/hosts/{{ansible_hostname}}
+    create=yes
+    line={{item}}
+  with_items:
+    - "GOAPTH=~/go"
+    - "PATH=$PATH:$GOPATH/bin"
+
+

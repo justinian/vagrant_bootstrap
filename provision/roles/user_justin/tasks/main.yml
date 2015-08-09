@@ -32,6 +32,7 @@
 
 - name: Add host-specific bashrc
   when: justin_dotfiles_clone|success
+  register: justin_local_bashrc
   lineinfile: >
     create=yes
     dest=/home/justin/.dotfiles/bashrc.d/hosts/{{ansible_hostname}}

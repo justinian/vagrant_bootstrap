@@ -4,6 +4,7 @@
   roles:
     - user_justin
     - dev_tools
+    - golang
 
   tasks:
     - name: Autoclean apt
