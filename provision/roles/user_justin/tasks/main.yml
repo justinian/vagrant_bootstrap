@@ -3,14 +3,20 @@
   register: justin_user_add
 
 - name: Adding justin's dotfiles
-  git: repo=https://bitbucket.org/justinian/dotfiles.git dest=/home/justin/.dotfiles
+  git: >
+    repo=https://bitbucket.org/justinian/dotfiles.git
+    dest=/home/justin/.dotfiles
+    update=no
   sudo: yes
   sudo_user: justin
   when: justin_user_add|success
   register: justin_dotfiles_clone
 
 - name: Adding justin's vim runtime
-  git: repo=https://github.com/justinian/vim_runtime.git dest=/home/justin/.vim
+  git: >
+    repo=https://github.com/justinian/vim_runtime.git
+    dest=/home/justin/.vim
+    update=no
   sudo: yes
   sudo_user: justin
   when: justin_user_add|success
