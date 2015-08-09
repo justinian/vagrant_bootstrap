@@ -1,0 +1,10 @@
+- name: Install pip
+  apt: package=python-pip
+  register: python_pip_install
+
+- name: Install python-dev
+  apt: package=python-dev
+
+- name: Install virtualenv
+  when: python_pip_install|success
+  pip: name=virtualenv

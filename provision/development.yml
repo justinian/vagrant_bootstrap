@@ -5,6 +5,7 @@
     - user_justin
     - dev_tools
     - golang
+    - python
 
   tasks:
     - name: Autoclean apt
